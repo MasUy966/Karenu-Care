@@ -41,21 +41,38 @@ function initApp() {
     });
 
   // Load Parts
-  fetch("/api/catalog")
-    .then(r => r.json())
-    .then(data => {
-      const pl = document.getElementById("partList");
-      const sel = document.getElementById("orderPartSelect");
-      pl.innerHTML = ""; sel.innerHTML = "";
-      data.forEach(p => {
-        const li = document.createElement("li");
-        li.textContent = `${p.id} - ${p.name} (stock: ${p.stock})`;
-        pl.appendChild(li);
-        const opt = document.createElement("option");
-        opt.value = p.id; opt.textContent = p.name;
-        sel.appendChild(opt);
-      });
+ // di initApp() atau bagian Spare Part load
+fetch("/api/catalog")
+  .then(res => res.json())
+  .then(data => {
+    const grid = document.getElementById("partList");
+    const sel  = document.getElementById("orderPartSelect");
+    grid.innerHTML = "";
+    sel.innerHTML  = "";
+    data.forEach(p => {
+      // 1) render kartu
+      const card = document.createElement("div");
+      card.className = "part-card";
+      card.innerHTML = `
+        <img src="${p.imageUrl}" alt="${p.name}" />
+        <div class="info">
+          <h4>${p.name}</h4>
+          <p><strong>ID:</strong> ${p.id}</p>
+          <p><strong>Stock:</strong> ${p.stock}</p>
+          <p><strong>Price:</strong> Rp ${p.price.toLocaleString()}</p>
+        </div>
+      `;
+      grid.appendChild(card);
+
+      // 2) update dropdown order
+      const opt = document.createElement("option");
+      opt.value = p.id;
+      opt.textContent = `${p.name} – Rp ${p.price.toLocaleString()}`;
+      sel.appendChild(opt);
     });
+  })
+  .catch(err => console.error("Error loading catalog:", err));
+
 
   // Load Tickets
   renderTickets();
