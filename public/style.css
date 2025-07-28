@@ -1,138 +1,113 @@
 :root {
-  --primary: #c62828;      /* Merah tua */
-  --secondary: #f44336;    /* Merah terang */
-  --accent: #ffee58;       /* Kuning cerah */
+  --primary: #c62828;
+  --secondary: #f44336;
+  --accent: #ffee58;
   --bg: #f5f5f5;
-  --sidebar-bg: #ffffff;
-  --sidebar-active: #fdecea; /* latar menu aktif */
+  --sidebar-bg: #fff;
+  --sidebar-active: #fdecea;
   --text: #212121;
 }
 
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
-.hidden { display: none; }
-.page, .section #dashboard {
-  background: linear-gradient(135deg, #ffe1e1 0%, #ffffff 100%);
-  border-radius: 8px;
-  padding: 2rem;
-}
+.hidden { display:none; }
+.page, .section { padding:1rem; }
+
+/* Buttons */
 .btn {
   background: var(--primary);
   color: #fff;
   border: none;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  transition: background 0.2s;  /* animasi halus */
+  transition: background .2s;
 }
+.btn:hover { background: var(--secondary); }
 
-.btn:hover {
-  background: var(--secondary);
-}
 /* Sidebar */
 .sidebar {
-  position: fixed; top: 0; left: 0; bottom: 0;
-  width: 250px; background: var(--sidebar-bg);
-  border-right: 1px solid #ddd;
-  transition: width .3s;
-  overflow: auto;
+  position: fixed; top:0; left:0; bottom:0;
+  width:250px; background:var(--sidebar-bg);
+  border-right:1px solid #ddd;
+  transition:width .3s;
+  overflow:auto;
 }
-.sidebar.collapsed { width: 50px; }
+.sidebar.collapsed { width:50px; }
 .toggle-btn {
-  background: none; border: none;
-  font-size: 1.2rem; margin: 0.5rem;
-  color: var(--primary); cursor: pointer;
+  background:none; border:none;
+  font-size:1.2rem; margin:0.5rem;
+  color:var(--primary); cursor:pointer;
 }
-.sidebar ul { padding: 0; }
+.sidebar ul { padding:0; margin:0; }
 .sidebar ul li {
-  padding: 0.8rem; cursor: pointer;
+  list-style:none;
+  padding:0.8rem;
+  cursor:pointer;
   transition: background .2s, color .2s;
 }
 .sidebar ul li:hover { background: var(--accent); }
 .sidebar ul li.active {
   background: var(--sidebar-active);
-  font-weight: bold;
   color: var(--primary);
+  font-weight: bold;
 }
+
 /* Content shift */
 #content {
-  margin-left: 250px;
+  margin-left:250px;
   transition: margin .3s;
-  padding: 1rem;
+  padding:1rem;
 }
-.sidebar.collapsed + #content { margin-left: 50px; }
+.sidebar.collapsed + #content { margin-left:50px; }
 
-/* Forms & lists */
-input, textarea, select {
-  display: block; width: 100%; max-width: 400px;
-  margin: 0.5rem 0; padding: 0.5rem;
-}
-.catalog-grid, #unitList, #ticketList, #partList {
-  margin: 0; padding: 0; list-style: none;
-}
-#unitList li, #ticketList li, #partList li {
-  margin: 0.5rem 0; padding: 0.5rem; background: #fff;
-  border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-.catalog-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.part-card, #unitList li {
-  border-left: 4px solid var(--primary);
-  background: #fff;
-  border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  overflow: hidden;
-}
-
-.part-card img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-}
-
-.part-card .info {
-  padding: 0.75rem;
-}
-
-.part-card .info h4 {
-  margin: 0 0 0.5rem;
-  color: var(--primary);
-}
-
-.part-card .info p {
-  margin: 0.25rem 0;
-  font-size: 0.9rem;
-}
-/* ===== KPI Grid & Cards (tambah di akhir file) ===== */
+/* KPI Grid */
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-  margin: 1.5rem 0;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap:1rem;
+  margin:1.5rem 0;
 }
 .kpi-card {
-  background: #fff;
-  padding: 1rem;
-  border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-  border-top: 4px solid var(--primary);
-  text-align: center;
+  background:#fff;
+  padding:1rem;
+  border-radius:6px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.1);
+  border-top:4px solid var(--primary);
+  text-align:center;
 }
-.kpi-card h3 {
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-  color: var(--text);
+.kpi-card h3 { margin-bottom:.5rem; font-size:1rem; }
+.kpi-card p { font-size:1.5rem; font-weight:bold; color:var(--primary); }
+
+/* Catalog Grid */
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+  gap:1rem;
+  margin-bottom:2rem;
 }
-.kpi-card p {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--primary);
+.part-card {
+  background:#fff;
+  border-radius:6px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.1);
+  overflow:hidden;
+  border-left:4px solid var(--primary);
+}
+.part-card img {
+  width:100%; height:140px;
+  object-fit:cover;
+}
+.part-card .info {
+  padding:.75rem;
+}
+.part-card .info h4 { margin:0 0 .5rem; color:var(--primary); }
+.part-card .info p { margin:.25rem 0; font-size:.9rem; }
+
+/* Lists */
+#unitList li, #ticketList li {
+  background:#fff; margin:.5rem 0; padding:.5rem;
+  border-radius:4px; box-shadow:0 1px 3px rgba(0,0,0,0.1);
 }
