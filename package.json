@@ -1,7 +1,7 @@
 {
   "name": "karenu-care",
   "version": "1.0.0",
-  "description": "Karenu Care – Digital After‑Sales Service Prototype",
+  "description": "Karenu Care – Digital After-Sales Service Prototype",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
