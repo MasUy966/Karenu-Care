@@ -4,6 +4,8 @@
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Karenu Care</title>
   <link rel="stylesheet" href="style.css"/>
+  <script src="https://unpkg.com/lucide/dist/lucide.min.js"></script>
+
 </head>
 <body>
   <!-- Login -->
@@ -19,16 +21,38 @@
   <!-- Main App (hidden by default) -->
   <div id="app" class="hidden">
     <!-- Sidebar -->
-    <nav id="sidebar" class="sidebar collapsed">
-      <button onclick="toggleSidebar()" class="toggle-btn">☰</button>
-      <ul>
-        <li onclick="showSection('dashboard')">Dashboard</li>
-        <li onclick="showSection('units')">Unit Management</li>
-        <li onclick="showSection('tickets')">Service Tickets</li>
-        <li onclick="showSection('parts')">Spare Part Order</li>
-        <li onclick="showSection('reports')">Reports</li>
-      </ul>
-    </nav>
+   <nav id="sidebar" class="sidebar collapsed">
+  <!-- tombol collapse -->
+  <button onclick="toggleSidebar()" class="toggle-btn">☰</button>
+  <ul>
+    <li data-section="dashboard" onclick="showSection('dashboard')">
+      <i data-lucide="home"></i>
+      <span>Dashboard</span>
+    </li>
+    <li data-section="units" onclick="showSection('units')">
+      <i data-lucide="truck"></i>
+      <span>Unit Management</span>
+    </li>
+    <li data-section="tickets" onclick="showSection('tickets')">
+      <i data-lucide="tool"></i>
+      <span>Service Tickets</span>
+    </li>
+    <li data-section="parts" onclick="showSection('parts')">
+      <i data-lucide="shopping-cart"></i>
+      <span>Spare Part Order</span>
+    </li>
+    <li data-section="reports" onclick="showSection('reports')">
+      <i data-lucide="bar-chart-2"></i>
+      <span>Reports</span>
+    </li>
+  </ul>
+</nav>
+
+<!-- Inisialisasi ikon Lucide -->
+<script>
+  lucide.replace();
+</script>
+
 
     <!-- Content -->
     <div id="content">
