@@ -14,34 +14,27 @@ function toggleSidebar() {
 }
 
 function showSection(id) {
-  // sembunyikan semua section...
   document.querySelectorAll(".section").forEach(s => s.classList.add("hidden"));
   document.getElementById(id).classList.remove("hidden");
-
-  // highlight menu aktif
   document.querySelectorAll("#sidebar ul li").forEach(li => {
-    const sec = li.getAttribute("data-section");
-    li.classList.toggle("active", sec === id);
+    li.classList.toggle("active", li.getAttribute("data-section") === id);
   });
 }
 
-
 function initApp() {
-  // Tampilkan dashboard saat pertama kali load
   showSection("dashboard");
 
-  // 1. Total Units → KPI Units & render list
+  // Total Units
   fetch("/api/units")
-    .then(res => res.json())
-    .then(units => {
-      // Render Unit Management list (jika masih pakai)
+    .then(r=>r.json())
+    .then(units=>{
       const ul = document.getElementById("unitList");
       ul.innerHTML = "";
-      units.forEach(u => {
+      units.forEach(u=>{
         const li = document.createElement("li");
         li.textContent = `${u.id} (${u.model}) purchased: ${u.purchaseDate}`;
         const hist = document.createElement("ul");
-        u.maintenanceHistory.forEach(h => {
+        u.maintenanceHistory.forEach(h=>{
           const hi = document.createElement("li");
           hi.textContent = `${h.date}: ${h.description}`;
           hist.appendChild(hi);
@@ -49,46 +42,65 @@ function initApp() {
         li.appendChild(hist);
         ul.appendChild(li);
       });
-
-      // KPI: Total Units
       document.getElementById("kpiUnits").textContent = units.length;
-    })
-    .catch(console.error);
+    });
 
-  // 2. Open Tickets → KPI Tickets & render tickets
+  // Open Tickets
   fetch("/api/tickets")
-    .then(res => res.json())
-    .then(tickets => {
-      // Render Service Tickets list (jika masih pakai renderTickets())
+    .then(r=>r.json())
+    .then(tickets=>{
       renderTickets();
-
-      // KPI: Open Tickets = semua tiket yang statusnya belum "Selesai"
-      const openCount = tickets.filter(t => t.status !== "Selesai").length;
+      const openCount = tickets.filter(t=>t.status!=="Selesai").length;
       document.getElementById("kpiTickets").textContent = openCount;
-    })
-    .catch(console.error);
+    });
 
-  // 3. Pending Orders → KPI Orders
-  // (Jika belum punya endpoint GET /api/orders, ditetapkan 0 dulu)
+  // Pending Orders (dummy)
   document.getElementById("kpiOrders").textContent = 0;
 
-  // 4. Next Maintenance → KPI Next Maintenance (tanggal terdekat dari hari ini)
+  // Next Maintenance
   fetch("/api/units")
-    .then(res => res.json())
-    .then(units => {
-      // kumpulkan semua tanggal maintenance
-      const upcomingDates = units
-        .flatMap(u => u.maintenanceHistory)
-        .map(h => new Date(h.date))
-        .filter(d => d >= new Date())          // hanya tanggal masa depan
-        .sort((a, b) => a - b);
+    .then(r=>r.json())
+    .then(units=>{
+      const dates = units
+        .flatMap(u=>u.maintenanceHistory.map(h=>new Date(h.date)))
+        .filter(d=>d>=new Date()).sort((a,b)=>a-b);
+      const next = dates[0];
+      document.getElementById("kpiNextMaint").textContent =
+        next
+          ? next.toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"})
+          : "-";
+    });
 
-      const next = upcomingDates[0];
-      document.getElementById("kpiNextMaint").textContent = next
-        ? next.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })
-        : "-";
-    })
-    .catch(console.error);
+  // Load Parts
+  fetch("/api/catalog")
+    .then(r=>r.json())
+    .then(data=>{
+      const grid = document.getElementById("partList");
+      const sel  = document.getElementById("orderPartSelect");
+      grid.innerHTML=""; sel.innerHTML="";
+      data.forEach(p=>{
+        // kartu
+        const card = document.createElement("div");
+        card.className = "part-card";
+        card.innerHTML = `
+          <img src="${p.imageUrl}" alt="${p.name}"/>
+          <div class="info">
+            <h4>${p.name}</h4>
+            <p><strong>ID:</strong> ${p.id}</p>
+            <p><strong>Stock:</strong> ${p.stock}</p>
+            <p><strong>Price:</strong> Rp ${p.price.toLocaleString()}</p>
+          </div>`;
+        grid.appendChild(card);
+        // dropdown
+        const opt = document.createElement("option");
+        opt.value = p.id;
+        opt.textContent = `${p.name} – Rp ${p.price.toLocaleString()}`;
+        sel.appendChild(opt);
+      });
+    });
+
+  // Render service tickets
+  renderTickets();
 }
 
 function createTicket(e) {
@@ -96,24 +108,22 @@ function createTicket(e) {
   const form = document.getElementById("ticketForm2");
   const fd = new FormData(form);
   fd.append("author", currentUser);
-  fetch("/api/tickets", { method: "POST", body: fd })
-    .then(r => r.json())
-    .then(() => { alert("Ticket created"); form.reset(); renderTickets(); });
+  fetch("/api/tickets", { method:"POST", body:fd })
+    .then(r=>r.json()).then(()=>{ alert("Ticket created"); form.reset(); renderTickets(); });
 }
 
 function renderTickets() {
   fetch("/api/tickets")
-    .then(r => r.json())
-    .then(data => {
+    .then(r=>r.json())
+    .then(data=>{
       const ul = document.getElementById("ticketList");
-      ul.innerHTML = "";
-      data.forEach(t => {
+      ul.innerHTML="";
+      data.forEach(t=>{
         const li = document.createElement("li");
         li.innerHTML = `
           <strong>${t.id}</strong> [${t.status}]<br>${t.issue}<br>
           ${t.photo?`<img src="${t.photo}" width="80"/><br>`:""}
-          <button onclick="respondPrompt('${t.id}')">Respond</button>
-        `;
+          <button onclick="respondPrompt('${t.id}')">Respond</button>`;
         ul.appendChild(li);
       });
     });
@@ -121,29 +131,21 @@ function renderTickets() {
 
 function respondPrompt(id) {
   const message = prompt("Reply message");
-  const newStatus = prompt("New status (optional)", "");
+  const newStatus = prompt("New status (optional)","");
   fetch(`/api/tickets/${id}/respond`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    method:"PUT", headers:{"Content-Type":"application/json"},
     body: JSON.stringify({ author: currentUser, message, newStatus })
-  }).then(() => renderTickets());
+  }).then(()=>renderTickets());
 }
 
 function orderPart(e) {
   e.preventDefault();
   const f = document.getElementById("orderForm");
-  const data = {
-    partId: f.partId.value,
-    quantity: f.quantity.value,
-    customer: currentUser
-  };
+  const data = { partId: f.partId.value, quantity: f.quantity.value, customer: currentUser };
   fetch("/api/catalog/order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method:"POST", headers:{"Content-Type":"application/json"},
     body: JSON.stringify(data)
-  })
-    .then(r => r.json())
-    .then(j => alert(JSON.stringify(j)));
+  }).then(r=>r.json()).then(j=>alert(JSON.stringify(j)));
 }
 
 function downloadReport() {
