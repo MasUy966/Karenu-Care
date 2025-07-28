@@ -8,7 +8,7 @@
 
 </head>
 <body>
-  <!-- Login -->
+
   <div id="login-page" class="page">
     <h2>Karenu Care Login</h2>
     <form id="loginForm" onsubmit="login(event)">
@@ -18,11 +18,8 @@
     </form>
   </div>
 
-  <!-- Main App (hidden by default) -->
   <div id="app" class="hidden">
-    <!-- Sidebar -->
    <nav id="sidebar" class="sidebar collapsed">
-  <!-- tombol collapse -->
   <button onclick="toggleSidebar()" class="toggle-btn">☰</button>
   <ul>
     <li data-section="dashboard" onclick="showSection('dashboard')">
@@ -48,18 +45,14 @@
   </ul>
 </nav>
 
-<!-- Inisialisasi ikon Lucide -->
 <script>
   lucide.replace();
 </script>
 
-
-    <!-- Content -->
     <div id="content">
       <section id="dashboard" class="section"><h2>Welcome to Karenu Care</h2> <section id="dashboard" class="section">
   <h2>Welcome to Karenu Care</h2>
 
-  <!-- ↓ Tambahkan kode KPI‑cards di sini ↓ -->
   <div class="kpi-grid">
     <div class="kpi-card">
       <h3>Total Units</h3>
@@ -78,8 +71,6 @@
       <p id="kpiNextMaint">—</p>
     </div>
   </div>
-  <!-- ↑ Selesai menambahkan KPI‑cards ↑ -->
-
 </section>
 
       <section id="units" class="section hidden">
