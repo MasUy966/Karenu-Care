@@ -15,13 +15,22 @@ body {
   color: var(--text);
 }
 .hidden { display: none; }
-.page, .section { padding: 1rem; }
+.page, .section #dashboard {
+  background: linear-gradient(135deg, #ffe1e1 0%, #ffffff 100%);
+  border-radius: 8px;
+  padding: 2rem;
+}
 .btn {
   background: var(--primary);
   color: #fff;
   border: none;
   padding: 0.5rem 1rem;
   cursor: pointer;
+  transition: background 0.2s;  /* animasi halus */
+}
+
+.btn:hover {
+  background: var(--secondary);
 }
 /* Sidebar */
 .sidebar {
@@ -75,7 +84,8 @@ input, textarea, select {
   margin-bottom: 2rem;
 }
 
-.part-card {
+.part-card, #unitList li {
+  border-left: 4px solid var(--primary);
   background: #fff;
   border-radius: 6px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
