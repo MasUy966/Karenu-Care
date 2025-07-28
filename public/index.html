@@ -64,16 +64,43 @@
 
       <!-- Service Tickets -->
       <section id="tickets" class="section hidden">
-        <h2>Create Ticket</h2>
-        <form id="ticketForm2" onsubmit="createTicket(event)">
-          <input type="text" name="forkliftId" placeholder="Forklift ID" required/>
-          <textarea name="issue" placeholder="Issue detail" required></textarea>
-          <input type="file" name="photo" accept="image/*"/>
-          <button type="submit" class="btn">Submit Ticket</button>
-        </form>
-        <h3>Track Tickets</h3>
-        <ul id="ticketList"></ul>
-      </section>
+  <h2>Create Ticket</h2>
+  <form id="ticketForm2" onsubmit="createTicket(event)" class="ticket-form">
+    <div class="form-group">
+      <label for="forkliftId">Forklift ID</label>
+      <input
+        type="text"
+        id="forkliftId"
+        name="forkliftId"
+        placeholder="Masukkan ID Forklift"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="issue">Deskripsi Kerusakan</label>
+      <textarea
+        id="issue"
+        name="issue"
+        placeholder="Jelaskan detail kerusakan"
+        required
+      ></textarea>
+    </div>
+    <div class="form-group">
+      <label for="photo">Foto Bukti (opsional)</label>
+      <input
+        type="file"
+        id="photo"
+        name="photo"
+        accept="image/*"
+      />
+    </div>
+    <button type="submit" class="btn">Submit Ticket</button>
+  </form>
+
+  <h3 style="margin-top:2rem;">Track Tickets</h3>
+  <ul id="ticketList" class="ticket-list"></ul>
+</section>
+
 
       <!-- Spare Part Order -->
       <section id="parts" class="section hidden">
