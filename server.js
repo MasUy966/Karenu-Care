@@ -12,11 +12,36 @@ const upload = multer({ dest: path.join(__dirname, "public/uploads") });
 // Demo in-memory data
 let tickets = [];
 let catalog = [
-  { id: "SP-001", name: "Ban Forklift A23", stock: 12, price: 250000 },
-  { id: "SP-002", name: "Baterai Forklift B15", stock: 5, price: 4500000 },
-  { id: "SP-003", name: "Engine Filter C07", stock: 20, price: 150000 },
-  { id: "SP-004", name: "Hydraulic Hose D09", stock: 0, price: 800000 }
+  {
+    id: "SP-001",
+    name: "Ban Forklift A23",
+    stock: 12,
+    price: 250000,
+    imageUrl: "/images/ban_a23.jpg"
+  },
+  {
+    id: "SP-002",
+    name: "Baterai Forklift B15",
+    stock: 5,
+    price: 4500000,
+    imageUrl: "/images/battery_b15.jpg"
+  },
+  {
+    id: "SP-003",
+    name: "Engine Filter C07",
+    stock: 20,
+    price: 150000,
+    imageUrl: "/images/filter_c07.jpg"
+  },
+  {
+    id: "SP-004",
+    name: "Hydraulic Hose D09",
+    stock: 0,
+    price: 800000,
+    imageUrl: "/images/hose_d09.jpg"
+  }
 ];
+
 let units = [
   {
     id: "U001", model: "Heli H2", purchaseDate: "2024-01-15",
