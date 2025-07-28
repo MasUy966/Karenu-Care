@@ -27,63 +27,68 @@ function showSection(id) {
 
 
 function initApp() {
+  // Tampilkan dashboard saat pertama kali load
   showSection("dashboard");
-  // Load Units
+
+  // 1. Total Units → KPI Units & render list
   fetch("/api/units")
-    .then(r => r.json())
-    .then(data => {
+    .then(res => res.json())
+    .then(units => {
+      // Render Unit Management list (jika masih pakai)
       const ul = document.getElementById("unitList");
       ul.innerHTML = "";
-      data.forEach(u => {
+      units.forEach(u => {
         const li = document.createElement("li");
         li.textContent = `${u.id} (${u.model}) purchased: ${u.purchaseDate}`;
-        const h = document.createElement("ul");
-        u.maintenanceHistory.forEach(m => {
-          const mi = document.createElement("li");
-          mi.textContent = `${m.date}: ${m.description}`;
-          h.appendChild(mi);
+        const hist = document.createElement("ul");
+        u.maintenanceHistory.forEach(h => {
+          const hi = document.createElement("li");
+          hi.textContent = `${h.date}: ${h.description}`;
+          hist.appendChild(hi);
         });
-        li.appendChild(h);
+        li.appendChild(hist);
         ul.appendChild(li);
       });
-    });
 
-  // Load Parts
- // di initApp() atau bagian Spare Part load
-fetch("/api/catalog")
-  .then(res => res.json())
-  .then(data => {
-    const grid = document.getElementById("partList");
-    const sel  = document.getElementById("orderPartSelect");
-    grid.innerHTML = "";
-    sel.innerHTML  = "";
-    data.forEach(p => {
-      // 1) render kartu
-      const card = document.createElement("div");
-      card.className = "part-card";
-      card.innerHTML = `
-        <img src="${p.imageUrl}" alt="${p.name}" />
-        <div class="info">
-          <h4>${p.name}</h4>
-          <p><strong>ID:</strong> ${p.id}</p>
-          <p><strong>Stock:</strong> ${p.stock}</p>
-          <p><strong>Price:</strong> Rp ${p.price.toLocaleString()}</p>
-        </div>
-      `;
-      grid.appendChild(card);
+      // KPI: Total Units
+      document.getElementById("kpiUnits").textContent = units.length;
+    })
+    .catch(console.error);
 
-      // 2) update dropdown order
-      const opt = document.createElement("option");
-      opt.value = p.id;
-      opt.textContent = `${p.name} – Rp ${p.price.toLocaleString()}`;
-      sel.appendChild(opt);
-    });
-  })
-  .catch(err => console.error("Error loading catalog:", err));
+  // 2. Open Tickets → KPI Tickets & render tickets
+  fetch("/api/tickets")
+    .then(res => res.json())
+    .then(tickets => {
+      // Render Service Tickets list (jika masih pakai renderTickets())
+      renderTickets();
 
+      // KPI: Open Tickets = semua tiket yang statusnya belum "Selesai"
+      const openCount = tickets.filter(t => t.status !== "Selesai").length;
+      document.getElementById("kpiTickets").textContent = openCount;
+    })
+    .catch(console.error);
 
-  // Load Tickets
-  renderTickets();
+  // 3. Pending Orders → KPI Orders
+  // (Jika belum punya endpoint GET /api/orders, ditetapkan 0 dulu)
+  document.getElementById("kpiOrders").textContent = 0;
+
+  // 4. Next Maintenance → KPI Next Maintenance (tanggal terdekat dari hari ini)
+  fetch("/api/units")
+    .then(res => res.json())
+    .then(units => {
+      // kumpulkan semua tanggal maintenance
+      const upcomingDates = units
+        .flatMap(u => u.maintenanceHistory)
+        .map(h => new Date(h.date))
+        .filter(d => d >= new Date())          // hanya tanggal masa depan
+        .sort((a, b) => a - b);
+
+      const next = upcomingDates[0];
+      document.getElementById("kpiNextMaint").textContent = next
+        ? next.toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })
+        : "-";
+    })
+    .catch(console.error);
 }
 
 function createTicket(e) {
