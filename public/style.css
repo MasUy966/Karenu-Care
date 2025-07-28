@@ -111,3 +111,28 @@ input, textarea, select {
   margin: 0.25rem 0;
   font-size: 0.9rem;
 }
+/* ===== KPI Grid & Cards (tambah di akhir file) ===== */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.kpi-card {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  border-top: 4px solid var(--primary);
+  text-align: center;
+}
+.kpi-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: var(--text);
+}
+.kpi-card p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary);
+}
