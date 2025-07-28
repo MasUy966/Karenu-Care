@@ -111,3 +111,22 @@ body {
   background:#fff; margin:.5rem 0; padding:.5rem;
   border-radius:4px; box-shadow:0 1px 3px rgba(0,0,0,0.1);
 }
+/* ─── Login Form Styles ─── */
+#login-page form {
+  max-width: 400px;     /* biar nggak melebar ke seluruh halaman */
+  margin: 2rem auto;    /* center secara horizontal */
+}
+#login-page form input,
+#login-page form button {
+  display: block;       /* blok level → otomatis di bawah satu sama lain */
+  width: 100%;          /* full‑width dalam form */
+  margin: 0.5rem 0;     /* spasi atas‑bawah antar elemen */
+}
+#login-page form input {
+  padding: 0.5rem;      /* beri ruang di dalam kotak input */
+  box-sizing: border-box;
+}
+#login-page form button {
+  padding: 0.6rem;      /* sesuaikan tinggi tombol */
+}
+
