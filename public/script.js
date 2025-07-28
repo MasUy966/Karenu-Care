@@ -14,9 +14,17 @@ function toggleSidebar() {
 }
 
 function showSection(id) {
+  // sembunyikan semua section...
   document.querySelectorAll(".section").forEach(s => s.classList.add("hidden"));
   document.getElementById(id).classList.remove("hidden");
+
+  // highlight menu aktif
+  document.querySelectorAll("#sidebar ul li").forEach(li => {
+    const sec = li.getAttribute("data-section");
+    li.classList.toggle("active", sec === id);
+  });
 }
+
 
 function initApp() {
   showSection("dashboard");
